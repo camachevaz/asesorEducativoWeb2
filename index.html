@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CHEE · asesor educativo — Capacitación en hojas de cálculo</title>
+<meta name="description" content="Capacitación práctica en Excel y Google Sheets. Cursos cortos y al grano, explicados en tu propio lenguaje. Mexicali, B.C.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --navy:#004487; --navy-deep:#06243f; --navy-card:#0c3056; --navy-line:#1c4571;
+  --lime:#9fc00f; --emerald:#01b17f; --emerald-lt:#0fce8e;
+  --ink:#0f2236; --ink-2:#06243f; --muted:#46596b; --muted-2:#56697a; --muted-3:#7e8fa0;
+  --line:#e6eef5; --line-2:#e8eef4; --bg:#ffffff; --bg-soft:#f4f8fb;
+  --accent:var(--lime);
+  --display:'Space Grotesk',sans-serif;
+  --body:'IBM Plex Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+}
+
+/* ============ BASE ============ */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--body);color:var(--ink);background:var(--bg);line-height:1.6;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+a{color:inherit}
+img,svg{display:block}
+h1,h2,h3{margin:0}
+ul{margin:0;padding:0;list-style:none}
+.wrap{max-width:1200px;margin:0 auto;padding-left:20px;padding-right:20px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);
+  font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:var(--emerald)}
+.eyebrow .dot{width:9px;height:9px;background:var(--accent);flex-shrink:0}
+.h2{font-family:var(--display);font-weight:700;font-size:clamp(28px,7vw,46px);
+  line-height:1.08;letter-spacing:-0.02em}
+
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+
+/* ============ NAV ============ */
+.nav{position:sticky;top:0;z-index:60;background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:12px;padding-bottom:12px}
+.brand{display:flex;align-items:center;text-decoration:none;flex-shrink:0}
+.nav-links{display:flex;align-items:center;gap:22px}
+.nav-link{text-decoration:none;color:#3c4f60;font-size:15px;font-weight:500;transition:color .15s}
+.nav-link:hover,.nav-link:focus-visible{color:var(--navy)}
+.lang{display:inline-flex;border:1px solid #d3dfea;border-radius:999px;overflow:hidden;
+  font-family:var(--mono);font-size:12px;font-weight:600}
+.lang button{border:0;padding:6px 12px;cursor:pointer;font:inherit;background:transparent;color:#5a6b7b}
+.lang button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.btn-wa{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#0f2236;
+  text-decoration:none;font-weight:600;font-size:14px;padding:10px 18px;border-radius:999px;
+  box-shadow:0 6px 16px rgba(159,192,15,0.32);transition:transform .15s}
+.btn-wa:hover,.btn-wa:focus-visible{transform:translateY(-1px)}
+.nav-toggle{display:inline-flex;flex-direction:column;justify-content:center;gap:5px;width:42px;height:42px;
+  padding:0;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer}
+.nav-toggle span{display:block;height:2px;width:20px;margin:0 auto;background:var(--navy);transition:.25s}
+.nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* Mobile-first: links hidden behind toggle */
+@media (max-width:860px){
+  .nav-links{position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;
+    gap:0;background:#fff;border-bottom:1px solid var(--line);padding:8px 20px 18px;
+    box-shadow:0 18px 30px -18px rgba(6,36,63,.25);
+    transform:translateY(-8px);opacity:0;pointer-events:none;transition:.2s}
+  .nav-links.open{transform:none;opacity:1;pointer-events:auto}
+  .nav-link{padding:13px 4px;border-bottom:1px solid #eef3f8;font-size:16px}
+  .nav-links .lang{align-self:flex-start;margin-top:14px}
+  .nav-links .btn-wa{margin-top:12px;justify-content:center}
+}
+@media (min-width:861px){.nav-toggle{display:none}}
+
+/* ============ HERO ============ */
+.hero{position:relative;background:linear-gradient(180deg,#fff 0%,var(--bg-soft) 100%);overflow:hidden}
+.hero-grid-bg{position:absolute;inset:0;opacity:.5;
+  background-image:linear-gradient(#e7eef5 1px,transparent 1px),linear-gradient(90deg,#e7eef5 1px,transparent 1px);
+  background-size:46px 46px;
+  -webkit-mask-image:radial-gradient(ellipse 90% 60% at 70% 20%,#000 0%,transparent 75%);
+  mask-image:radial-gradient(ellipse 90% 60% at 70% 20%,#000 0%,transparent 75%)}
+.hero-poly{position:absolute;top:-30px;right:-50px;width:200px;height:200px;opacity:.85;
+  animation:floaty 9s ease-in-out infinite;pointer-events:none}
+.hero-inner{position:relative;padding-top:48px;padding-bottom:56px;display:grid;gap:40px;align-items:center}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,9vw,66px);
+  line-height:1.04;letter-spacing:-0.02em;margin:18px 0 18px;color:var(--navy-deep);text-wrap:balance}
+.hero p.lead{font-size:clamp(16px,4.4vw,19px);color:var(--muted);max-width:540px;margin:0 0 28px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn-wa-lg{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#0f2236;
+  text-decoration:none;font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;
+  box-shadow:0 10px 24px rgba(159,192,15,0.34);transition:transform .15s}
+.btn-wa-lg:hover,.btn-wa-lg:focus-visible{transform:translateY(-2px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--navy);
+  text-decoration:none;font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;
+  border:1.5px solid #cddbe8;transition:border-color .15s}
+.btn-ghost:hover,.btn-ghost:focus-visible{border-color:var(--navy)}
+.tagline{display:flex;align-items:center;gap:12px;margin-top:26px;font-family:var(--display);
+  font-weight:600;font-size:14px;letter-spacing:.04em;color:var(--muted-3)}
+.tagline b{color:var(--accent);font-size:18px;font-weight:600}
+.tagline .sep{opacity:.4}
+
+/* spreadsheet card */
+.sheet{background:#fff;border:1px solid #e2eaf2;border-radius:16px;
+  box-shadow:0 30px 60px -22px rgba(6,36,63,.30);overflow:hidden;font-family:var(--mono);font-size:13px}
+.sheet-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;background:var(--navy-deep)}
+.sheet-bar .dotmac{width:11px;height:11px;border-radius:50%}
+.sheet-bar .name{margin-left:10px;color:#9fb6cc;font-size:12px}
+.sheet-fx{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid #e8eef4;background:#f7fafc}
+.sheet-fx .fx{font-style:italic;color:#90a2b4;border:1px solid #d8e2ec;border-radius:5px;padding:2px 9px}
+.sheet-fx .formula{color:var(--navy);font-weight:500}
+.row{display:flex;border-bottom:1px solid #eef3f8}
+.row .rn{width:30px;text-align:center;padding:9px 0;background:#f4f7fa;color:#9aabbb;border-right:1px solid #eef3f8;flex-shrink:0}
+.row .c-a{flex:1.6;padding:9px 10px;border-right:1px solid #eef3f8;color:#33475b}
+.row .c-b{width:48px;padding:9px 10px;border-right:1px solid #eef3f8;text-align:right;color:#33475b;flex-shrink:0}
+.row .c-c{flex:1.3;padding:9px 10px;display:flex;align-items:center}
+.row.head{background:#eef3f8;color:#6b7d8e;font-weight:600}
+.row.head .c-a,.row.head .c-b,.row.head .c-c{color:#6b7d8e}
+.row.label .c-a,.row.label .c-b{font-weight:600;color:var(--navy-deep)}
+.bar{display:block;height:9px;background:var(--emerald);border-radius:3px}
+.row.total{background:#f7fafc;border-bottom:0}
+.row.total .c-a{font-weight:600;color:var(--navy-deep)}
+.chip-total{display:inline-block;font-weight:700;color:var(--navy-deep);
+  background:rgba(159,192,15,.22);border:1.5px solid var(--accent);border-radius:4px;padding:2px 7px}
+
+/* ============ DIFERENCIADORES ============ */
+.diff{padding-top:56px;padding-bottom:56px}
+.diff-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.card{border:1px solid var(--line-2);border-radius:14px;padding:24px;background:#fff;transition:border-color .15s}
+.card .num{font-family:var(--mono);color:var(--accent);font-weight:600;font-size:15px;margin-bottom:12px}
+.card h3{font-family:var(--display);font-size:19px;margin:0 0 8px;color:var(--navy-deep)}
+.card p{margin:0;color:var(--muted-2);font-size:15px}
+
+/* ============ SERVICIOS ============ */
+.dark{background:var(--navy-deep);color:#eaf1f7}
+.section{padding-top:64px;padding-bottom:64px}
+.section-intro{max-width:680px}
+.section-intro h2{margin:14px 0 14px;color:inherit}
+.lead-muted{color:#9fb6cc;font-size:clamp(16px,4.2vw,18px);max-width:600px;margin:0 0 36px}
+.svc-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.svc{background:var(--navy-card);border:1px solid var(--navy-line);border-radius:16px;padding:28px}
+.svc .ic{width:48px;height:48px;border-radius:12px;background:rgba(159,192,15,.16);
+  display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.svc h3{font-family:var(--display);font-size:21px;margin:0 0 10px}
+.svc p{margin:0;color:#9fb6cc;font-size:15px}
+
+/* ============ CURSOS ============ */
+.cursos-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:36px}
+.cursos-head h2{margin:0 0 12px;color:var(--navy-deep)}
+.cursos-head p{color:var(--muted-2);font-size:clamp(16px,4.2vw,18px);max-width:560px;margin:0}
+.legend{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;
+  color:var(--muted-2);border:1px solid #dde6ef;border-radius:999px;padding:8px 16px;white-space:nowrap}
+.legend .sq{width:10px;height:10px;border-radius:2px}
+.course-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.course{border:1px solid var(--line);border-radius:14px;padding:26px;background:#fff;
+  display:flex;flex-direction:column;border-top:4px solid var(--emerald);transition:box-shadow .15s,transform .15s}
+.course:hover{box-shadow:0 18px 40px -20px rgba(6,36,63,.28);transform:translateY(-2px)}
+.course .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.course .lvl{font-family:var(--mono);font-size:12px;letter-spacing:.12em;font-weight:600;color:var(--emerald)}
+.course .ref{font-family:var(--mono);font-size:12px;color:#9aabbb}
+.course h3{font-family:var(--display);font-size:24px;margin:0 0 14px;color:var(--navy-deep)}
+.course ul{display:flex;flex-direction:column;gap:9px;color:var(--muted-2);font-size:15px}
+.course li{display:flex;gap:9px}
+.course li .arr{color:var(--accent);flex-shrink:0}
+.course.t-emerald{border-top-color:var(--emerald)} .course.t-emerald .lvl{color:var(--emerald)}
+.course.t-green{border-top-color:#0a8a64} .course.t-green .lvl{color:#0a8a64}
+.course.t-navy{border-top-color:var(--navy)} .course.t-navy .lvl{color:var(--navy)}
+.course.t-lime{border-top-color:var(--lime)} .course.t-lime .lvl{color:#7d9a0c}
+
+/* ============ SOBRE ============ */
+.about{background:var(--bg-soft)}
+.about-grid{display:grid;grid-template-columns:1fr;gap:32px;align-items:center}
+.id-card{position:relative;background:var(--navy-deep);border-radius:20px;padding:40px 32px;overflow:hidden}
+.id-poly{position:absolute;bottom:-20px;right:-20px;width:140px;height:140px;opacity:.85}
+.id-avatar{position:relative;width:110px;height:110px;border-radius:50%;
+  background:linear-gradient(135deg,#0c3056,#01b17f);display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);font-weight:700;font-size:42px;color:#fff;letter-spacing:-.02em;margin-bottom:24px}
+.id-name{position:relative;color:#fff;font-family:var(--display);font-weight:600;font-size:22px;line-height:1.2}
+.id-role{position:relative;color:var(--accent);font-family:var(--mono);font-size:13px;letter-spacing:.1em;margin-top:8px}
+.about-body h2{margin:14px 0 20px;color:var(--navy-deep);font-size:clamp(26px,6.5vw,42px)}
+.about-body p{color:var(--muted);font-size:clamp(16px,4.4vw,18px);margin:0 0 18px}
+.about-stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:12px}
+.about-stats .k{font-family:var(--display);font-weight:600;color:var(--navy-deep);font-size:16px}
+.about-stats .v{color:var(--muted-3);font-size:14px}
+
+/* ============ CONTACTO ============ */
+.contact-card{position:relative;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-deep) 100%);
+  border-radius:24px;padding:40px 28px;overflow:hidden}
+.contact-grid-bg{position:absolute;inset:0;opacity:.16;
+  background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);
+  background-size:40px 40px;
+  -webkit-mask-image:radial-gradient(circle at 85% 12%,#000,transparent 60%);
+  mask-image:radial-gradient(circle at 85% 12%,#000,transparent 60%)}
+.contact-inner{position:relative;display:grid;grid-template-columns:1fr;gap:32px;align-items:center}
+.contact-info h2{color:#fff;margin:14px 0 16px;font-size:clamp(28px,7vw,46px)}
+.contact-info>p{color:#acc2d6;font-size:clamp(16px,4.4vw,18px);margin:0 0 28px;max-width:480px}
+.contact-list{display:flex;flex-direction:column;gap:14px;font-size:15px}
+.contact-list a{display:inline-flex;align-items:center;gap:12px;color:#eaf1f7;text-decoration:none;transition:color .15s}
+.contact-list a:hover,.contact-list a:focus-visible{color:var(--accent)}
+.contact-list .ic{width:38px;height:38px;border-radius:10px;background:rgba(159,192,15,.18);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.contact-list span.txt{font-family:var(--mono);word-break:break-word}
+.form-card{background:#fff;border-radius:16px;padding:26px}
+.form-card label{display:block;font-family:var(--display);font-weight:600;color:var(--navy-deep);font-size:15px;margin-bottom:8px}
+.form-card textarea{width:100%;border:1.5px solid #d8e2ec;border-radius:10px;padding:12px 14px;
+  font:inherit;font-size:15px;color:var(--ink);resize:vertical;margin-bottom:14px;min-height:108px}
+.form-card textarea:focus{border-color:var(--navy);outline:2px solid rgba(0,68,135,.2);outline-offset:1px}
+.form-card button{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  background:var(--accent);color:#0f2236;border:0;font:inherit;font-weight:600;font-size:16px;
+  padding:14px;border-radius:999px;cursor:pointer;box-shadow:0 8px 20px rgba(159,192,15,.32);transition:transform .15s}
+.form-card button:hover,.form-card button:focus-visible{transform:translateY(-1px)}
+.form-note{margin:14px 0 0;color:#8294a4;font-size:13px;text-align:center}
+
+/* ============ FOOTER ============ */
+.footer{background:var(--navy-deep);color:#9fb6cc}
+.footer-inner{padding-top:48px;padding-bottom:28px}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:32px;flex-wrap:wrap}
+.footer-brand .sub{font-family:var(--display);letter-spacing:.42em;font-size:11px;color:var(--accent);margin-top:10px;padding-left:4px}
+.footer-brand .moto{margin-top:20px;font-family:var(--display);font-weight:600;font-size:20px;color:#fff;letter-spacing:.02em}
+.footer-brand .moto b{color:var(--accent);font-weight:600}
+.footer-cols{display:flex;gap:48px;flex-wrap:wrap}
+.footer-col .ttl{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6f87a0;margin-bottom:14px}
+.footer-col .links{display:flex;flex-direction:column;gap:10px;font-size:15px}
+.footer-col a{text-decoration:none;color:#c2d3e4;transition:color .15s}
+.footer-col a:hover,.footer-col a:focus-visible{color:var(--accent)}
+.footer-col.mono .links{font-family:var(--mono)}
+.socials{display:flex;gap:12px;margin-top:18px}
+.socials a{width:36px;height:36px;border-radius:50%;background:var(--navy);display:flex;
+  align-items:center;justify-content:center;color:#fff;text-decoration:none;transition:.15s}
+.socials a:hover,.socials a:focus-visible{background:var(--accent);color:var(--navy-deep)}
+.footer-bottom{border-top:1px solid #16395d;margin-top:36px;padding-top:22px;display:flex;
+  justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13px;color:#6f87a0}
+.footer-bottom .mono{font-family:var(--mono)}
+
+:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+
+/* ============ RESPONSIVE UP ============ */
+@media (min-width:600px){
+  .wrap{padding-left:28px;padding-right:28px}
+  .diff-grid{grid-template-columns:repeat(2,1fr)}
+  .svc-grid{grid-template-columns:repeat(2,1fr)}
+  .course-grid{grid-template-columns:repeat(2,1fr)}
+  .contact-card{padding:56px 48px}
+  .form-card{padding:30px}
+}
+@media (min-width:861px){
+  .hero-inner{grid-template-columns:1.04fr .96fr;gap:56px;padding-top:72px;padding-bottom:80px}
+  .hero-poly{width:300px;height:300px;top:-40px;right:-40px}
+  .diff{padding-top:74px;padding-bottom:74px}
+  .diff-grid{grid-template-columns:repeat(4,1fr)}
+  .section{padding-top:90px;padding-bottom:90px}
+  .svc-grid{grid-template-columns:repeat(3,1fr)}
+  .course-grid{grid-template-columns:repeat(4,1fr)}
+  .about-grid{grid-template-columns:.85fr 1.15fr;gap:56px}
+  .id-card{padding:48px 40px}
+  .id-avatar{width:120px;height:120px;font-size:46px}
+  .contact-inner{grid-template-columns:1.1fr .9fr;gap:48px}
+}
+</style>
+</head>
+<body>
+<div id="inicio">
+
+  <!-- ============ NAV ============ -->
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a href="#inicio" class="brand" aria-label="CHEE asesor educativo — inicio">
+        <svg width="116" height="30" viewBox="0 0 470 120" fill="#004487" role="img" aria-label="CHEE asesor educativo">
+          <path d="M84 19 A52 52 0 1 0 84 101 L70.5 83.6 A30 30 0 1 1 70.5 36.4 Z"></path>
+          <rect x="118" y="12" width="23" height="96"></rect><rect x="181" y="12" width="23" height="96"></rect>
+          <rect x="118" y="48" width="86" height="23"></rect><rect x="232" y="12" width="23" height="96"></rect>
+          <rect x="424" y="12" width="23" height="96"></rect><rect x="232" y="12" width="215" height="23"></rect>
+          <rect x="232" y="85" width="215" height="23"></rect><rect x="309" y="48" width="61" height="23"></rect>
+        </svg>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-links" id="navLinks" aria-label="Principal">
+        <a class="nav-link" data-en="Services" href="#servicios">Servicios</a>
+        <a class="nav-link" data-en="Courses" href="#cursos">Cursos</a>
+        <a class="nav-link" data-en="About" href="#sobre">Sobre mí</a>
+        <a class="nav-link" data-en="Contact" href="#contacto">Contacto</a>
+        <div class="lang" role="group" aria-label="Idioma / Language">
+          <button data-langbtn="es" aria-pressed="true">ES</button>
+          <button data-langbtn="en" aria-pressed="false">EN</button>
+        </div>
+        <a class="btn-wa" data-wa href="#" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2Zm0 18.13c-1.52 0-3.01-.41-4.3-1.18l-.31-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.35c0-4.54 3.7-8.23 8.25-8.23 4.54 0 8.23 3.69 8.23 8.23 0 4.55-3.69 8.25-8.25 8.25Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"></path></svg>
+          <span>WhatsApp</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <svg class="hero-poly" viewBox="0 0 200 200" aria-hidden="true">
+      <polygon points="100,10 190,60 150,120" fill="#01b17f"></polygon>
+      <polygon points="190,60 150,120 200,140" fill="#0fce8e"></polygon>
+      <polygon points="100,10 150,120 90,90" fill="#0a8a64"></polygon>
+      <polygon points="90,90 150,120 120,180" fill="#9fc00f"></polygon>
+    </svg>
+    <div class="wrap hero-inner">
+      <div>
+        <span class="eyebrow"><span class="dot"></span><span data-en="=SPREADSHEET_TRAINING()">=CAPACITACIÓN_EN_HOJAS_DE_CÁLCULO()</span></span>
+        <h1 data-en="Spreadsheets, from zero to hero.">Hojas de cálculo, de cero a guerrero.</h1>
+        <p class="lead" data-en="Hands-on training in Excel and Google Sheets. Short, no-fluff courses, explained in your own language so you actually use what you learn.">Capacitación práctica en Excel y Google Sheets. Cursos cortos y al grano, explicados en tu propio lenguaje para que de verdad apliques lo que aprendes.</p>
+        <div class="hero-cta">
+          <a class="btn-wa-lg" data-wa href="#" target="_blank" rel="noopener" data-en="Message me on WhatsApp">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2Z"></path></svg>
+            Escríbeme por WhatsApp
+          </a>
+          <a class="btn-ghost" href="#cursos" data-en="View courses">Ver cursos</a>
+        </div>
+        <div class="tagline">
+          <b>mejora</b><span class="sep">·</span><b>avanza</b><span class="sep">·</span><b>crece</b>
+        </div>
+      </div>
+
+      <div>
+        <div class="sheet" role="img" aria-label="Hoja de cálculo de ejemplo con cursos y avance">
+          <div class="sheet-bar">
+            <span class="dotmac" style="background:#ff5f57"></span>
+            <span class="dotmac" style="background:#febc2e"></span>
+            <span class="dotmac" style="background:#28c840"></span>
+            <span class="name">productividad.xlsx</span>
+          </div>
+          <div class="sheet-fx"><span class="fx">fx</span><span class="formula">=SUMA(B2:B5)</span></div>
+          <div class="row head"><div class="rn"></div><div class="c-a">A</div><div class="c-b">B</div><div class="c-c">C</div></div>
+          <div class="row label"><div class="rn">1</div><div class="c-a">Curso</div><div class="c-b">Hrs</div><div class="c-c" style="font-weight:600;color:var(--navy-deep)">Avance</div></div>
+          <div class="row"><div class="rn">2</div><div class="c-a">Básico</div><div class="c-b">6</div><div class="c-c"><span class="bar" style="width:100%"></span></div></div>
+          <div class="row"><div class="rn">3</div><div class="c-a">Intermedio</div><div class="c-b">8</div><div class="c-c"><span class="bar" style="width:78%"></span></div></div>
+          <div class="row"><div class="rn">4</div><div class="c-a">Avanzado</div><div class="c-b">10</div><div class="c-c"><span class="bar" style="width:58%"></span></div></div>
+          <div class="row"><div class="rn">5</div><div class="c-a">Datos</div><div class="c-b">6</div><div class="c-c"><span class="bar" style="width:42%"></span></div></div>
+          <div class="row total"><div class="rn">6</div><div class="c-a">Total</div><div class="c-b"><span class="chip-total">30</span></div><div class="c-c" style="color:#9aabbb">hrs</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DIFERENCIADORES ============ -->
+  <section class="diff">
+    <div class="wrap diff-grid">
+      <div class="card"><div class="num">01</div><h3 data-en="Practical &amp; usable">Práctico y utilizable</h3><p data-en="You leave applying what you learned from day one — real cases, not theory.">Sales aplicando lo aprendido desde el primer día: casos reales, no teoría.</p></div>
+      <div class="card"><div class="num">02</div><h3 data-en="Short &amp; concise">Cortos y concisos</h3><p data-en="No fluff, no detours — only what you actually use, so your time pays off.">Sin paja ni rodeos: solo lo que de verdad usas, para que tu tiempo rinda.</p></div>
+      <div class="card"><div class="num">03</div><h3 data-en="Tailored to you">Aterrizado a ti</h3><p data-en="Explanations adapted to the language of whoever receives them.">Explicaciones adaptadas al lenguaje de quien las recibe.</p></div>
+      <div class="card"><div class="num">04</div><h3 data-en="Excel &amp; Sheets">Excel y Sheets</h3><p data-en="Master both leading spreadsheet tools, whichever your team uses.">Domina las dos herramientas líderes, sea cual sea la que usa tu equipo.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICIOS ============ -->
+  <section id="servicios" class="dark" style="scroll-margin-top:72px">
+    <div class="wrap section">
+      <div class="section-intro">
+        <span class="eyebrow" style="color:var(--accent)"><span class="dot"></span>=SERVICIOS()</span>
+        <h2 class="h2" data-en="Training that fits how you work">Capacitación que se adapta a cómo trabajas</h2>
+      </div>
+      <p class="lead-muted" data-en="Choose the format that fits you — every course is the same hands-on, get-to-the-point approach.">Elige el formato que mejor te quede; todos los cursos mantienen el mismo enfoque práctico y al grano.</p>
+      <div class="svc-grid">
+        <div class="svc">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg></div>
+          <h3 data-en="Online &amp; live">En línea y en vivo</h3>
+          <p data-en="Live video classes from anywhere, with exercises you follow along in real time.">Clases por videollamada desde donde estés, con ejercicios que sigues en tiempo real.</p>
+        </div>
+        <div class="svc">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+          <h3 data-en="In-company">En tu empresa</h3>
+          <p data-en="Tailored team training built around your actual files and workflows.">Capacitación a equipos, diseñada a la medida sobre tus propios archivos y procesos.</p>
+        </div>
+        <div class="svc">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
+          <h3 data-en="One-on-one">Individual</h3>
+          <p data-en="Personalized sessions at your own pace, focused on exactly what you need.">Sesiones personalizadas a tu ritmo, enfocadas justo en lo que necesitas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CURSOS ============ -->
+  <section id="cursos" style="scroll-margin-top:72px">
+    <div class="wrap section">
+      <span class="eyebrow"><span class="dot"></span>=CURSOS()</span>
+      <div class="cursos-head" style="margin-top:14px">
+        <div>
+          <h2 class="h2" data-en="From zero to hero">De cero a guerrero</h2>
+          <p data-en="A clear path through spreadsheets: start at the basics and climb to data visualization.">Una ruta clara por las hojas de cálculo: empieza desde lo esencial y sube hasta la visualización de datos.</p>
+        </div>
+        <div class="legend"><span class="sq" style="background:#0a7c4a"></span>Excel<span style="opacity:.4">·</span><span class="sq" style="background:#0f9d58"></span>Google Sheets</div>
+      </div>
+      <div class="course-grid">
+        <div class="course t-emerald">
+          <div class="top"><span class="lvl" data-en="LEVEL 01">NIVEL 01</span><span class="ref">A1</span></div>
+          <h3 data-en="Basic">Básico</h3>
+          <ul>
+            <li data-en="Interface &amp; smart navigation"><span class="arr">▸</span>Interfaz y navegación ágil</li>
+            <li data-en="Formatting &amp; data entry"><span class="arr">▸</span>Formato y captura de datos</li>
+            <li data-en="Basic formulas: SUM, AVERAGE"><span class="arr">▸</span>Fórmulas básicas: SUMA, PROMEDIO</li>
+            <li data-en="Cell references"><span class="arr">▸</span>Referencias de celdas</li>
+          </ul>
+        </div>
+        <div class="course t-green">
+          <div class="top"><span class="lvl" data-en="LEVEL 02">NIVEL 02</span><span class="ref">B2</span></div>
+          <h3 data-en="Intermediate">Intermedio</h3>
+          <ul>
+            <li data-en="Logic functions: IF, IFS"><span class="arr">▸</span>Funciones lógicas: SI, anidadas</li>
+            <li data-en="Lookups: VLOOKUP / XLOOKUP"><span class="arr">▸</span>Búsquedas: BUSCARV / BUSCARX</li>
+            <li data-en="Conditional formatting"><span class="arr">▸</span>Formato condicional</li>
+            <li data-en="Data validation &amp; tables"><span class="arr">▸</span>Validación de datos y tablas</li>
+          </ul>
+        </div>
+        <div class="course t-navy">
+          <div class="top"><span class="lvl" data-en="LEVEL 03">NIVEL 03</span><span class="ref">C3</span></div>
+          <h3 data-en="Advanced">Avanzado</h3>
+          <ul>
+            <li data-en="Pivot tables"><span class="arr">▸</span>Tablas dinámicas</li>
+            <li data-en="Nested functions"><span class="arr">▸</span>Funciones anidadas</li>
+            <li data-en="Data cleaning"><span class="arr">▸</span>Limpieza de datos</li>
+            <li data-en="Task automation"><span class="arr">▸</span>Automatización de tareas</li>
+          </ul>
+        </div>
+        <div class="course t-lime">
+          <div class="top"><span class="lvl" data-en="SPECIALTY">ESPECIALIDAD</span><span class="ref">D4</span></div>
+          <h3 data-en="Data visualization">Visualización de datos</h3>
+          <ul>
+            <li data-en="Charts that communicate"><span class="arr">▸</span>Gráficos que comunican</li>
+            <li data-en="Dashboards &amp; KPIs"><span class="arr">▸</span>Dashboards e indicadores</li>
+            <li data-en="Storytelling with data"><span class="arr">▸</span>Storytelling con datos</li>
+            <li data-en="Clear, decision-ready reports"><span class="arr">▸</span>Reportes claros para decidir</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SOBRE ============ -->
+  <section id="sobre" class="about" style="scroll-margin-top:72px">
+    <div class="wrap section about-grid">
+      <div>
+        <div class="id-card">
+          <svg class="id-poly" viewBox="0 0 120 120" aria-hidden="true">
+            <polygon points="60,5 115,35 90,75" fill="#01b17f"></polygon>
+            <polygon points="115,35 90,75 120,95" fill="#0fce8e"></polygon>
+            <polygon points="60,5 90,75 55,55" fill="#9fc00f"></polygon>
+          </svg>
+          <div class="id-avatar">CC</div>
+          <div class="id-name">Mtro. Carlos Manuel<br>Chee Vázquez</div>
+          <div class="id-role" data-en="educational advisor">asesor educativo</div>
+        </div>
+      </div>
+      <div class="about-body">
+        <span class="eyebrow"><span class="dot"></span>=SOBRE_MÍ()</span>
+        <h2 class="h2" data-en="Spreadsheets, made human">Hojas de cálculo, explicadas como humanos</h2>
+        <p data-en="I'm a teacher and educational advisor focused on productivity and data. I turn spreadsheets into a tool anyone can master — no unnecessary jargon, no filler.">Soy maestro y asesor educativo enfocado en productividad y manejo de datos. Convierto las hojas de cálculo en una herramienta que cualquier persona puede dominar: sin tecnicismos innecesarios y sin relleno.</p>
+        <p data-en="Every session starts from what you already do and speaks your language — so the learning sticks and you put it to work the same day.">Cada sesión parte de lo que ya haces y habla tu mismo lenguaje, para que el aprendizaje se quede y lo pongas a trabajar el mismo día.</p>
+        <div class="about-stats">
+          <div><div class="k" data-en="Hands-on approach">Enfoque práctico</div><div class="v" data-en="real cases, real files">casos reales, archivos reales</div></div>
+          <div><div class="k">Excel + Google Sheets</div><div class="v" data-en="both platforms covered">ambas plataformas</div></div>
+          <div><div class="k">Mexicali, B.C.</div><div class="v" data-en="online, everywhere">en línea, a todo México</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACTO ============ -->
+  <section id="contacto" style="scroll-margin-top:72px">
+    <div class="wrap section">
+      <div class="contact-card">
+        <div class="contact-grid-bg" aria-hidden="true"></div>
+        <div class="contact-inner">
+          <div class="contact-info">
+            <span class="eyebrow" style="color:var(--accent)"><span class="dot"></span>=CONTACTO()</span>
+            <h2 class="h2" data-en="Ready to level up your spreadsheets?">¿List@ para subir de nivel en hojas de cálculo?</h2>
+            <p data-en="Tell me what you or your team need and I'll put together a course that fits. Fastest reply on WhatsApp.">Cuéntame qué necesitas tú o tu equipo y armo un curso a la medida. La respuesta más rápida es por WhatsApp.</p>
+            <div class="contact-list">
+              <a data-wa href="#" target="_blank" rel="noopener">
+                <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2Z"></path></svg></span>
+                <span class="txt">(686) 584.2356</span>
+              </a>
+              <a href="mailto:carlos@asesoreducativo.mx">
+                <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 5L2 7"></path></svg></span>
+                <span class="txt">carlos@asesoreducativo.mx</span>
+              </a>
+              <a href="https://www.asesoreducativo.mx" target="_blank" rel="noopener">
+                <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20 15.3 15.3 0 0 1 0-20"></path></svg></span>
+                <span class="txt">www.asesoreducativo.mx</span>
+              </a>
+            </div>
+          </div>
+          <div class="form-card">
+            <label for="chee-msg" data-en="What do you need?">¿Qué necesitas?</label>
+            <textarea id="chee-msg" rows="4" data-en-ph="e.g. Excel basics for a 5-person team" placeholder="ej. Excel básico para un equipo de 5 personas"></textarea>
+            <button id="sendWa" type="button" data-en="Send via WhatsApp">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2Z"></path></svg>
+              Enviar por WhatsApp
+            </button>
+            <p class="form-note" data-en="No commitment — just a quick chat about what fits you.">Sin compromiso: solo platicamos qué te conviene.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <svg width="140" height="36" viewBox="0 0 470 120" fill="#fff" role="img" aria-label="CHEE">
+            <path d="M84 19 A52 52 0 1 0 84 101 L70.5 83.6 A30 30 0 1 1 70.5 36.4 Z"></path>
+            <rect x="118" y="12" width="23" height="96"></rect><rect x="181" y="12" width="23" height="96"></rect>
+            <rect x="118" y="48" width="86" height="23"></rect><rect x="232" y="12" width="23" height="96"></rect>
+            <rect x="424" y="12" width="23" height="96"></rect><rect x="232" y="12" width="215" height="23"></rect>
+            <rect x="232" y="85" width="215" height="23"></rect><rect x="309" y="48" width="61" height="23"></rect>
+          </svg>
+          <div class="sub">ASESOR EDUCATIVO</div>
+          <div class="moto"><b>mejora</b> · <b>avanza</b> · <b>crece</b></div>
+        </div>
+        <div class="footer-cols">
+          <div class="footer-col">
+            <div class="ttl" data-en="Navigate">Navegación</div>
+            <div class="links">
+              <a data-en="Services" href="#servicios">Servicios</a>
+              <a data-en="Courses" href="#cursos">Cursos</a>
+              <a data-en="About" href="#sobre">Sobre mí</a>
+              <a data-en="Contact" href="#contacto">Contacto</a>
+            </div>
+          </div>
+          <div class="footer-col mono">
+            <div class="ttl" data-en="Contact">Contacto</div>
+            <div class="links">
+              <a data-wa href="#" target="_blank" rel="noopener">(686) 584.2356</a>
+              <a href="mailto:carlos@asesoreducativo.mx">carlos@asesoreducativo.mx</a>
+              <a href="https://www.asesoreducativo.mx" target="_blank" rel="noopener">asesoreducativo.mx</a>
+            </div>
+            <div class="socials">
+              <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H7v3h3v7h3v-7h3l1-3h-4v-2c0-.55.45-1 1-1Z"></path></svg></a>
+              <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle></svg></a>
+              <a href="#" aria-label="Twitter"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.8-.5v.1c0 2 1.4 3.6 3.3 4a4 4 0 0 1-1.8.1 4.1 4.1 0 0 0 3.8 2.8A8.2 8.2 0 0 1 2 18.3a11.6 11.6 0 0 0 6.3 1.8c7.5 0 11.7-6.2 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2Z"></path></svg></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> CHEE · asesor educativo</span>
+        <span class="mono" data-en="Hands-on spreadsheet training · Excel &amp; Google Sheets">Capacitación práctica en hojas de cálculo · Excel &amp; Google Sheets</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var WA_NUMBER = '526865842356';
+  var WA_MESSAGE = 'Hola Carlos, me interesa la capacitación en hojas de cálculo.';
+  var waBase = 'https://wa.me/' + WA_NUMBER.replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent(WA_MESSAGE);
+
+  // wire all default WhatsApp links
+  document.querySelectorAll('[data-wa]').forEach(function(a){ a.setAttribute('href', waBase); });
+
+  // year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // mobile menu
+  var toggle = document.getElementById('navToggle');
+  var links = document.getElementById('navLinks');
+  function closeMenu(){ links.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); toggle.setAttribute('aria-label','Abrir menú'); }
+  toggle.addEventListener('click', function(){
+    var open = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+  });
+  links.querySelectorAll('a.nav-link').forEach(function(a){ a.addEventListener('click', closeMenu); });
+
+  // language toggle (ES default; cache ES text on first run)
+  var root = document.body;
+  root.querySelectorAll('[data-en]').forEach(function(el){ if(el.dataset.es===undefined) el.dataset.es = el.innerHTML; });
+  var esBtn = document.querySelector('[data-langbtn="es"]');
+  var enBtn = document.querySelector('[data-langbtn="en"]');
+  function applyLang(l){
+    root.querySelectorAll('[data-en]').forEach(function(el){
+      el.innerHTML = (l==='en') ? el.dataset.en : el.dataset.es;
+    });
+    var ta = document.getElementById('chee-msg');
+    if(ta){
+      if(!ta.dataset.esPh) ta.dataset.esPh = ta.getAttribute('placeholder')||'';
+      ta.setAttribute('placeholder', l==='en' ? (ta.dataset.enPh||'') : ta.dataset.esPh);
+    }
+    esBtn.setAttribute('aria-pressed', l==='es' ? 'true':'false');
+    enBtn.setAttribute('aria-pressed', l==='en' ? 'true':'false');
+    document.documentElement.lang = l;
+  }
+  esBtn.addEventListener('click', function(){ applyLang('es'); });
+  enBtn.addEventListener('click', function(){ applyLang('en'); });
+
+  // contact form -> WhatsApp
+  document.getElementById('sendWa').addEventListener('click', function(){
+    var ta = document.getElementById('chee-msg');
+    var txt = (ta && ta.value.trim()) ? ta.value.trim() : WA_MESSAGE;
+    window.open('https://wa.me/' + WA_NUMBER.replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent(txt), '_blank', 'noopener');
+  });
+})();
+</script>
+</body>
+</html>
