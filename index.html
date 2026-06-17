@@ -882,10 +882,12 @@ ul { list-style: none; }
   gap: 12px;
 }
 .test-author img {
-  width: 44px; height: 44px;
-  border-radius: 50%;
+  width: 56px; height: 64px;
+  border-radius: var(--r-sm);
   object-fit: cover;
-  border: 2px solid var(--line-2);
+  object-position: center top;
+  border: 1px solid var(--line-2);
+  flex-shrink: 0;
 }
 .test-author .name {
   font-weight: 600;
@@ -996,7 +998,7 @@ ul { list-style: none; }
 .sobre-stat .num em { font-style: normal; color: var(--accent); }
 .sobre-stat .lbl { font-size: 13px; color: var(--text-3); margin-top: 2px; }
 
-/* Clientes logos */
+/* Clientes marquee */
 .clientes-ttl {
   font-family: var(--mono);
   font-size: 11px;
@@ -1005,21 +1007,53 @@ ul { list-style: none; }
   color: var(--text-3);
   margin-bottom: 16px;
 }
-.clientes-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
+.clientes-marquee-wrap {
+  position: relative;
+  overflow: hidden;
+  /* fade edges */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
 }
-.cliente-logo {
-  height: 36px;
+.clientes-track {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+  animation: marquee 36s linear infinite;
+}
+.clientes-marquee-wrap:hover .clientes-track { animation-play-state: paused; }
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.cliente-tile {
+  flex-shrink: 0;
+  width: 180px;
+  height: 96px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--bg-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  transition: border-color .2s;
+  cursor: default;
+}
+.clientes-marquee-wrap:hover .cliente-tile { border-color: var(--line-2); }
+.cliente-tile img {
+  max-width: 100%;
+  max-height: 100%;
   width: auto;
-  opacity: 0.45;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.55;
   filter: brightness(0) invert(1);
   transition: opacity .2s;
-  object-fit: contain;
 }
-.cliente-logo:hover { opacity: 0.85; }
+.clientes-marquee-wrap:hover .cliente-tile img { opacity: 0.85; }
+@media (prefers-reduced-motion: reduce) {
+  .clientes-track { animation: none; }
+}
 
 /* =============================================
    PRECIOS
@@ -2054,24 +2088,45 @@ ul { list-style: none; }
 
       <div>
         <div class="clientes-ttl" data-en="COMPANIES AND INSTITUTIONS SERVED">EMPRESAS E INSTITUCIONES ATENDIDAS</div>
-        <div class="clientes-grid">
-          <img class="cliente-logo" src="assets/clientes/gnerd.jpg" alt="G Nerd" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/xochicalco.jpg" alt="Universidad Xochicalco" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/uvm.jpg" alt="UVM" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/unea.jpg" alt="UNEA" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/uabc-radio.jpg" alt="UABC Radio" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/pathways.jpg" alt="Pathways School of Languages" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/itm.jpg" alt="Instituto Tecnológico de Mexicali" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/educacion-bc.jpg" alt="Educación BC" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/coworkthink.jpg" alt="CoworkThink!" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/cobachbc.jpg" alt="Colegio de Bachilleres de Baja California" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/cmic.jpg" alt="CMIC Mexicali" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/cfe.jpg" alt="CFE" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/cetys.jpg" alt="CETYS Universidad" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/cea.jpg" alt="CEA" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/canacintra.jpg" alt="CANACINTRA" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/biblioteca.jpg" alt="Biblioteca Pública Central Estatal Mexicali" loading="lazy">
-          <img class="cliente-logo" src="assets/clientes/cbm.jpg" alt="Christmas Business de México" loading="lazy">
+        <div class="clientes-marquee-wrap" aria-label="Empresas e instituciones atendidas">
+          <div class="clientes-track" aria-hidden="false">
+          <div class="cliente-tile"><img src="assets/clientes/gnerd.jpg" alt="G Nerd" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/xochicalco.jpg" alt="Universidad Xochicalco" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/uvm.jpg" alt="UVM" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/unea.jpg" alt="UNEA" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/uabc-radio.jpg" alt="UABC Radio" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/pathways.jpg" alt="Pathways School of Languages" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/itm.jpg" alt="Instituto Tecnológico de Mexicali" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/educacion-bc.jpg" alt="Educación BC" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/identite.jpg" alt="Identité" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/coworkthink.jpg" alt="CoworkThink!" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/cobachbc.jpg" alt="Colegio de Bachilleres de Baja California" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/cmic.jpg" alt="CMIC Mexicali" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/cfe.jpg" alt="CFE" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/cetys.jpg" alt="CETYS Universidad" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/cea.jpg" alt="CEA" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/canacintra.jpg" alt="CANACINTRA" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/biblioteca.jpg" alt="Biblioteca Pública Central Estatal Mexicali" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/cbm.jpg" alt="Christmas Business de México" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/gnerd.jpg" alt="G Nerd" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/xochicalco.jpg" alt="Universidad Xochicalco" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/uvm.jpg" alt="UVM" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/unea.jpg" alt="UNEA" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/uabc-radio.jpg" alt="UABC Radio" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/pathways.jpg" alt="Pathways School of Languages" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/itm.jpg" alt="Instituto Tecnológico de Mexicali" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/educacion-bc.jpg" alt="Educación BC" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/identite.jpg" alt="Identité" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/coworkthink.jpg" alt="CoworkThink!" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/cobachbc.jpg" alt="Colegio de Bachilleres de Baja California" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/cmic.jpg" alt="CMIC Mexicali" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/cfe.jpg" alt="CFE" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/cetys.jpg" alt="CETYS Universidad" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/cea.jpg" alt="CEA" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/canacintra.jpg" alt="CANACINTRA" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/biblioteca.jpg" alt="Biblioteca Pública Central Estatal Mexicali" loading="lazy"></div>
+          <div class="cliente-tile"><img src="assets/clientes/cbm.jpg" alt="Christmas Business de México" loading="lazy"></div>
+          </div>
         </div>
       </div>
     </div>
