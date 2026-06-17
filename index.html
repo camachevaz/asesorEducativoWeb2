@@ -1028,25 +1028,24 @@ ul { list-style: none; }
   display: flex;
   gap: 12px;
   width: max-content;
-  animation: marquee 36s linear infinite;
+  will-change: transform;
+  /* animation driven by JS for drag+auto support */
+  cursor: grab;
 }
-.clientes-marquee-wrap:hover .clientes-track { animation-play-state: paused; }
-@keyframes marquee {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
+.clientes-track.is-dragging { cursor: grabbing; }
 .cliente-tile {
   flex-shrink: 0;
   width: 180px;
   height: 96px;
   border: 1px solid var(--line);
   border-radius: var(--r-md);
-  background: #e8eef4;   /* fondo claro — los logos JPG se ven sobre él */
+  background: #ffffff;
   overflow: hidden;
-  transition: border-color .2s, background .2s;
-  cursor: default;
+  transition: border-color .2s;
+  cursor: grab;
 }
-.clientes-marquee-wrap:hover .cliente-tile { border-color: var(--line-2); background: #f0f5f9; }
+.cliente-tile:active { cursor: grabbing; }
+.clientes-marquee-wrap:hover .cliente-tile { border-color: var(--line-2); }
 .cliente-tile img {
   width: 100%;
   height: 100%;
@@ -1059,7 +1058,7 @@ ul { list-style: none; }
 }
 .clientes-marquee-wrap:hover .cliente-tile img { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
-  .clientes-track { animation: none; }
+  .clientes-track { transition: none; }
 }
 
 /* =============================================
@@ -1982,7 +1981,7 @@ ul { list-style: none; }
         <div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
         <blockquote>El maestro tiene la capacidad de dirigirse a distintos públicos: tanto si eres novato y te da pena preguntar aspectos básicos, como a otros más especializados. Lo recomiendo, es una persona con paciencia y entusiasmo.</blockquote>
         <div class="test-author">
-          <img src="assets/testimonios/lilianal.png" alt="Liliana López León" loading="lazy">
+          <img src="assets/testimonios/liliana-l.png" alt="Liliana López León" loading="lazy">
           <div>
             <div class="name">Liliana López León</div>
             <div class="role">Profesora de tiempo completo · CETYS Universidad</div>
@@ -2030,7 +2029,7 @@ ul { list-style: none; }
         <div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
         <blockquote>Además de ser un excelente asesor y dominar su campo profesional, es una persona dispuesta a colaborar con su tiempo y experiencia en favor de la comunidad. ¡Muchas gracias Carlos!</blockquote>
         <div class="test-author">
-          <img src="assets/testimonios/lilianaa.png" alt="Liliana Álvarez" loading="lazy">
+          <img src="assets/testimonios/liliana-a.png" alt="Liliana Álvarez" loading="lazy">
           <div>
             <div class="name">Liliana Álvarez</div>
             <div class="role">Coordinadora · Biblioteca Pública Central Estatal</div>
@@ -2461,6 +2460,113 @@ ul { list-style: none; }
   });
 
 })();
+
+  /* ── MARQUEE: auto-scroll + pause-on-hover + drag ──────────────────── */
+  (function () {
+    const wrap  = document.querySelector('.clientes-marquee-wrap');
+    const track = document.querySelector('.clientes-track');
+    if (!wrap || !track) return;
+
+    const SPEED = 0.5;          // px per frame at idle
+    const FRICTION = 0.92;      // drag deceleration
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let offset    = 0;
+    let halfW     = 0;          // half of track width (one copy)
+    let raf       = null;
+    let paused    = false;
+    let dragging  = false;
+    let dragStartX = 0;
+    let dragStartOffset = 0;
+    let velocity  = 0;
+    let lastX     = 0;
+    let lastT     = 0;
+
+    function measure() {
+      // track contains 2 identical copies; half = one copy width
+      halfW = track.scrollWidth / 2;
+    }
+
+    function setX(x) {
+      offset = x;
+      // wrap around: keep offset in [-halfW, 0]
+      if (offset <= -halfW) offset += halfW;
+      if (offset > 0)       offset -= halfW;
+      track.style.transform = 'translateX(' + offset + 'px)';
+    }
+
+    function tick() {
+      if (!dragging) {
+        if (!paused && !reducedMotion) {
+          velocity = -SPEED;
+        } else if (!dragging) {
+          // decelerate to stop
+          velocity *= FRICTION;
+          if (Math.abs(velocity) < 0.01) velocity = 0;
+        }
+        setX(offset + velocity);
+      }
+      raf = requestAnimationFrame(tick);
+    }
+
+    // ── Hover pause ──────────────────────────────────────────────────────
+    wrap.addEventListener('mouseenter', () => { paused = true; });
+    wrap.addEventListener('mouseleave', () => { paused = false; });
+
+    // ── Pointer drag (mouse + touch + stylus) ────────────────────────────
+    function onPointerDown(e) {
+      dragging = true;
+      dragStartX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
+      dragStartOffset = offset;
+      velocity = 0;
+      lastX = dragStartX;
+      lastT = performance.now();
+      track.classList.add('is-dragging');
+      e.preventDefault();
+    }
+
+    function onPointerMove(e) {
+      if (!dragging) return;
+      const x   = e.clientX ?? e.touches?.[0]?.clientX ?? lastX;
+      const now  = performance.now();
+      const dt   = Math.max(now - lastT, 1);
+      velocity   = (x - lastX) / dt * 16; // normalise to ~60fps frame
+      lastX = x;
+      lastT = now;
+      setX(dragStartOffset + (x - dragStartX));
+    }
+
+    function onPointerUp() {
+      if (!dragging) return;
+      dragging = false;
+      track.classList.remove('is-dragging');
+      // keep velocity for momentum, then auto takes over
+      paused = false;
+    }
+
+    // Mouse
+    track.addEventListener('mousedown',  onPointerDown, { passive: false });
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup',   onPointerUp);
+
+    // Touch (iOS needs passive:false to prevent scroll interference)
+    track.addEventListener('touchstart', onPointerDown, { passive: false });
+    window.addEventListener('touchmove',  (e) => { if (dragging) { onPointerMove(e); e.preventDefault(); } }, { passive: false });
+    window.addEventListener('touchend',   onPointerUp);
+
+    // ── Init ─────────────────────────────────────────────────────────────
+    // Wait for images to settle before measuring
+    window.addEventListener('load', () => {
+      measure();
+      raf = requestAnimationFrame(tick);
+    });
+    // Fallback if load already fired
+    if (document.readyState === 'complete') {
+      measure();
+      if (!raf) raf = requestAnimationFrame(tick);
+    }
+  })();
+
 </script>
 </body>
 </html>
