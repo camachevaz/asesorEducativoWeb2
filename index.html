@@ -908,10 +908,17 @@ ul { list-style: none; }
 .sobre-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: clamp(32px, 5vw, 60px);
-  align-items: center;
+  gap: clamp(28px, 4vw, 48px);
+  align-items: start;
 }
 @media (min-width: 860px) { .sobre-grid { grid-template-columns: 0.8fr 1.2fr; } }
+
+/* Marquee vive fuera del grid, a ancho completo del wrap */
+.sobre-clientes {
+  margin-top: clamp(32px, 4vw, 48px);
+  padding-top: clamp(28px, 3vw, 36px);
+  border-top: 1px solid var(--line);
+}
 
 .id-card {
   background: var(--bg-2);
@@ -1010,9 +1017,12 @@ ul { list-style: none; }
 .clientes-marquee-wrap {
   position: relative;
   overflow: hidden;
+  /* Rompe el wrap para tocar bordes de ventana */
+  width: 100vw;
+  margin-left: calc(-1 * clamp(20px, 5vw, 48px));
   /* fade edges */
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
 }
 .clientes-track {
   display: flex;
@@ -2037,7 +2047,8 @@ ul { list-style: none; }
 
 <!-- ============ SOBRE MÍ ============ -->
 <section id="sobre" class="sobre section" style="scroll-margin-top:64px">
-  <div class="wrap sobre-grid">
+  <div class="wrap">
+  <div class="sobre-grid">
 
     <div>
       <div class="id-card">
@@ -2086,7 +2097,11 @@ ul { list-style: none; }
         </div>
       </div>
 
-      <div>
+    </div>
+
+  </div><!-- /sobre-grid -->
+
+  <div class="sobre-clientes">
         <div class="clientes-ttl" data-en="COMPANIES AND INSTITUTIONS SERVED">EMPRESAS E INSTITUCIONES ATENDIDAS</div>
         <div class="clientes-marquee-wrap" aria-label="Empresas e instituciones atendidas">
           <div class="clientes-track" aria-hidden="false">
@@ -2129,9 +2144,9 @@ ul { list-style: none; }
           </div>
         </div>
       </div>
-    </div>
+  </div><!-- /sobre-clientes -->
 
-  </div>
+  </div><!-- /wrap -->
 </section>
 
 <!-- ============ PRECIOS ============ -->
