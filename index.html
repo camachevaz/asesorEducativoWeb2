@@ -701,137 +701,7 @@ ul { list-style: none; }
 .nivel-teal2   { color: #34d399; }
 .nivel-indigo  { color: #818cf8; }
 
-/* =============================================
-   SUPERPROFE
-   ============================================= */
-.superprofe {
-  background: linear-gradient(135deg, #1a0f00 0%, #0f1a00 100%);
-  position: relative;
-  overflow: hidden;
-  border-top: 1px solid rgba(245,158,11,0.2);
-  border-bottom: 1px solid rgba(245,158,11,0.2);
-}
-.superprofe::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(245,158,11,0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(245,158,11,0.07) 1px, transparent 1px);
-  background-size: 40px 40px;
-  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 20% 50%, #000 0%, transparent 70%);
-  mask-image: radial-gradient(ellipse 80% 60% at 20% 50%, #000 0%, transparent 70%);
-  pointer-events: none;
-}
-.sp-eyebrow { color: var(--sp); }
-.sp-eyebrow .dot { background: var(--sp); }
-.superprofe .h2 { color: #fff; margin: 14px 0 16px; }
-.sp-lead { color: rgba(255,255,255,0.55); margin-bottom: 36px; }
-
-.sp-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 40px;
-  align-items: start;
-}
-@media (min-width: 860px) { .sp-grid { grid-template-columns: 1.1fr 0.9fr; } }
-
-.sp-modulos { display: flex; flex-direction: column; gap: 14px; }
-
-.sp-mod {
-  display: flex;
-  gap: 16px;
-  padding: 18px 20px;
-  border: 1px solid rgba(245,158,11,0.15);
-  border-radius: var(--r-md);
-  background: rgba(245,158,11,0.04);
-  transition: border-color .15s;
-}
-.sp-mod:hover { border-color: rgba(245,158,11,0.35); }
-.sp-mod .mod-num {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--sp);
-  font-weight: 600;
-  flex-shrink: 0;
-  padding-top: 3px;
-  letter-spacing: 0.1em;
-}
-.sp-mod h4 {
-  font-family: var(--display);
-  font-size: 16px;
-  color: rgba(255,255,255,0.9);
-  margin: 0 0 4px;
-}
-.sp-mod p {
-  font-size: 13px;
-  color: rgba(255,255,255,0.45);
-  margin: 0;
-  line-height: 1.5;
-}
-.sp-mod .dur {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--sp);
-  margin-top: 6px;
-}
-
-/* Pricing cards for SúperProfe */
-.sp-precios { display: flex; flex-direction: column; gap: 14px; }
-
-.sp-precio-card {
-  border: 1px solid rgba(245,158,11,0.2);
-  border-radius: var(--r-lg);
-  padding: 22px 24px;
-  background: rgba(245,158,11,0.05);
-  position: relative;
-  transition: border-color .15s;
-}
-.sp-precio-card.featured {
-  border-color: rgba(245,158,11,0.5);
-  background: rgba(245,158,11,0.1);
-}
-.sp-precio-card .badge {
-  position: absolute;
-  top: -11px;
-  left: 20px;
-  background: var(--sp);
-  color: #1a0a00;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 12px;
-  border-radius: 999px;
-  letter-spacing: 0.08em;
-}
-.sp-precio-card .plan-name {
-  font-family: var(--display);
-  font-size: 16px;
-  color: rgba(255,255,255,0.85);
-  margin-bottom: 6px;
-}
-.sp-precio-card .plan-price {
-  font-family: var(--display);
-  font-size: 30px;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 12px;
-}
-.sp-precio-card .plan-price span {
-  font-size: 15px;
-  font-weight: 400;
-  color: rgba(255,255,255,0.4);
-}
-.sp-precio-card ul { display: flex; flex-direction: column; gap: 6px; }
-.sp-precio-card li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: rgba(255,255,255,0.55);
-  font-size: 14px;
-}
-.sp-precio-card li .chk { color: var(--sp); flex-shrink: 0; }
-.sp-precio-card .plan-cta { margin-top: 18px; width: 100%; justify-content: center; }
+/* SUPERPROFE — estilos movidos a superprofe.asesoreducativo.mx */
 
 /* =============================================
    TESTIMONIOS
@@ -1357,7 +1227,7 @@ ul { list-style: none; }
     <nav class="nav-links" id="navLinks" aria-label="Principal">
       <a class="nav-link" data-en="Services"  href="#servicios">Servicios</a>
       <a class="nav-link" data-en="Courses"   href="#cursos">Cursos</a>
-      <a class="nav-link" data-en="SuperProfe" href="#superprofe">SúperProfe</a>
+      <a class="nav-link" data-en="SuperProfe" href="https://superprofe.asesoreducativo.mx" target="_blank" rel="noopener">SúperProfe</a>
       <a class="nav-link" data-en="About"     href="#sobre">Sobre mí</a>
       <a class="nav-link" data-en="Pricing"   href="#precios">Precios</a>
       <a class="nav-link" data-en="Contact"   href="#contacto">Contacto</a>
@@ -1868,92 +1738,49 @@ ul { list-style: none; }
 <section id="superprofe" class="superprofe section" style="scroll-margin-top:64px">
   <div class="wrap">
     <span class="eyebrow sp-eyebrow"><span class="dot"></span>=SÚPERPROFE()</span>
-    <h2 class="h2" data-en="A complete toolkit for teachers">Un kit completo para docentes</h2>
-    <p class="lead sp-lead" style="max-width:560px" data-en="Turn your teaching materials into reusable videos, manage your video calls with confidence, automate your spreadsheets, and generate your own assessment tools.">Convierte tu material didáctico en videos reutilizables, administra tus videollamadas con seguridad, automatiza tus hojas de cálculo y genera tus propios instrumentos de evaluación.</p>
+    <h2 class="h2" style="color:#fff;margin:14px 0 12px">Formación digital para docentes</h2>
+    <p class="lead sp-lead" style="max-width:560px;margin-bottom:36px">Dos programas diseñados específicamente para el aula: uno modular y flexible para cualquier docente, y uno institucional pensado para transformar plantas docentes completas en escuelas privadas.</p>
 
-    <div class="sp-grid">
-      <div class="sp-modulos">
-        <div class="sp-mod">
-          <div class="mod-num">MOD 01</div>
-          <div>
-            <h4 data-en="Produce content">Produce contenido</h4>
-            <p data-en="OBS and YouTube — build a video repository you can reuse with future groups.">OBS y YouTube — construye un repositorio de videos reutilizables para tus grupos.</p>
-            <div class="dur">2 hrs</div>
-          </div>
+    <div style="display:grid;grid-template-columns:1fr;gap:16px;max-width:760px" class="sp-cards-ref">
+      <!-- Esencial -->
+      <a href="https://superprofe.asesoreducativo.mx#esencial" target="_blank" rel="noopener"
+         style="display:flex;align-items:center;gap:20px;padding:22px 24px;
+                border:1.5px solid rgba(245,158,11,.3);border-radius:var(--r-lg);
+                background:rgba(245,158,11,.05);text-decoration:none;
+                transition:border-color .15s,background .15s"
+         onmouseover="this.style.borderColor='rgba(245,158,11,.7)';this.style.background='rgba(245,158,11,.1)'"
+         onmouseout="this.style.borderColor='rgba(245,158,11,.3)';this.style.background='rgba(245,158,11,.05)'">
+        <div style="width:12px;height:12px;border-radius:50%;background:var(--sp);flex-shrink:0"></div>
+        <div style="flex:1">
+          <div style="font-family:var(--display);font-weight:700;font-size:18px;color:var(--sp)">SúperProfe Esencial</div>
+          <div style="font-size:14px;color:rgba(255,255,255,.45);margin-top:4px">Modular · 10 hrs · cualquier docente · desde $570 / módulo</div>
         </div>
-        <div class="sp-mod">
-          <div class="mod-num">MOD 02</div>
-          <div>
-            <h4 data-en="Secure video calls">Videollamadas seguras</h4>
-            <p data-en="Zoom, Meet, Teams — share exactly what you need, with full control over your privacy.">Zoom, Meet, Teams — comparte exactamente lo que necesitas, con control total de tu privacidad.</p>
-            <div class="dur">2 hrs</div>
-          </div>
-        </div>
-        <div class="sp-mod">
-          <div class="mod-num">MOD 03</div>
-          <div>
-            <h4 data-en="Spreadsheets: basic calculations">Cálculos básicos en hojas de cálculo</h4>
-            <p data-en="Excel and Google Sheets — automate grades, averages, and attendance.">Excel y Google Sheets — automatiza calificaciones, promedios y asistencia.</p>
-            <div class="dur">2 hrs</div>
-          </div>
-        </div>
-        <div class="sp-mod">
-          <div class="mod-num">MOD 04</div>
-          <div>
-            <h4 data-en="Advanced functions">Funciones avanzadas</h4>
-            <p data-en="Averages, proportions, lookups — implement complex operations simply.">Promedios, proporciones, búsquedas — implementa operaciones complejas de forma simple.</p>
-            <div class="dur">3 hrs</div>
-          </div>
-        </div>
-        <div class="sp-mod">
-          <div class="mod-num">MOD 05</div>
-          <div>
-            <h4 data-en="Content creator teacher">Maestro generador de contenido</h4>
-            <p data-en="Screencasts, automatic exams with Google Forms, and reusable assessment tools.">Capturas de pantalla, exámenes automáticos con Google Forms e instrumentos de evaluación reutilizables.</p>
-            <div class="dur">3 hrs</div>
-          </div>
-        </div>
-      </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(245,158,11,.6)" stroke-width="2" style="flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
 
-      <div class="sp-precios">
-        <div class="sp-precio-card">
-          <div class="plan-name" data-en="Single module">Módulo individual</div>
-          <div class="plan-price">$570 <span data-en="/ module">/ módulo</span></div>
-          <ul>
-            <li><span class="chk">✓</span> <span data-en="Regular price">Precio regular</span></li>
-            <li><span class="chk">✓</span> <span data-en="Digital certificate">Certificado digital</span></li>
-            <li><span class="chk">✓</span> <span data-en="DC-3 certificate (optional)">Constancia DC-3 (opcional)</span></li>
-          </ul>
-          <a class="btn btn-ghost plan-cta" data-wa-curso="SúperProfe — módulo individual" href="#" target="_blank" rel="noopener" ><span data-en="I'm interested" data-es="Me interesa">Me interesa</span></a>
+      <!-- Aula -->
+      <a href="https://superprofe.asesoreducativo.mx#aula" target="_blank" rel="noopener"
+         style="display:flex;align-items:center;gap:20px;padding:22px 24px;
+                border:1.5px solid rgba(16,185,129,.3);border-radius:var(--r-lg);
+                background:rgba(16,185,129,.05);text-decoration:none;
+                transition:border-color .15s,background .15s"
+         onmouseover="this.style.borderColor='rgba(16,185,129,.7)';this.style.background='rgba(16,185,129,.1)'"
+         onmouseout="this.style.borderColor='rgba(16,185,129,.3)';this.style.background='rgba(16,185,129,.05)'">
+        <div style="width:12px;height:12px;border-radius:50%;background:#10b981;flex-shrink:0"></div>
+        <div style="flex:1">
+          <div style="font-family:var(--display);font-weight:700;font-size:18px;color:#10b981">SúperProfe Aula</div>
+          <div style="font-size:14px;color:rgba(255,255,255,.45);margin-top:4px">Institucional · 16 hrs · escuelas privadas · ed. básica · NEM 2022</div>
         </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(16,185,129,.6)" stroke-width="2" style="flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
 
-        <div class="sp-precio-card featured">
-          <div class="badge" data-en="SAVE 10%">AHORRAS 10%</div>
-          <div class="plan-name" data-en="All modules">Todos los módulos</div>
-          <div class="plan-price">$2,565 <span data-en="/ person">/ persona</span></div>
-          <ul>
-            <li><span class="chk">✓</span> <span data-en="All 5 modules">Los 5 módulos</span></li>
-            <li><span class="chk">✓</span> <span data-en="Digital certificate">Certificado digital</span></li>
-            <li><span class="chk">✓</span> <span data-en="DC-3 certificate (optional)">Constancia DC-3 (opcional)</span></li>
-          </ul>
-          <a class="btn btn-sp plan-cta" data-wa-curso="SúperProfe — todos los módulos" href="#" target="_blank" rel="noopener" data-en="I want all modules">Quiero todos los módulos</a>
-        </div>
-
-        <div class="sp-precio-card">
-		  <div class="badge" data-en="SAVE 25%">AHORRAN 25%</div>
-          <div class="plan-name" data-en="Group package">Paquete para grupos</div>
-          <div class="plan-price">$8,550 <span data-en="/ 4 people">/ 4 personas</span></div>
-          <ul>
-            <li><span class="chk">✓</span> <span data-en="25% savings for the team">Ahorran 25% en equipo</span></li>
-            <li><span class="chk">✓</span> <span data-en="All modules for 4">Todos los módulos para 4 personas</span></li>
-            <li><span class="chk">✓</span> <span data-en="Digital certificate per person">Certificado digital por persona</span></li>
-            <li><span class="chk">✓</span> <span data-en="DC-3 certificate (optional)">Constancia DC-3 (opcional)</span></li>
-          </ul>
-          <a class="btn btn-ghost plan-cta" data-wa-curso="SúperProfe — paquete grupal" href="#" target="_blank" rel="noopener" data-en="Schedule group session">Agenda sesión grupal</a>
-        </div>
-
-        <p style="font-size:12px;color:rgba(255,255,255,0.3);font-family:var(--mono);text-align:center;margin-top:8px" data-en="Prices in MXN · IVA included · Persona física">Precios en MXN · IVA incluido · Persona física</p>
-      </div>
+    <div style="margin-top:24px">
+      <a href="https://superprofe.asesoreducativo.mx" target="_blank" rel="noopener"
+         class="btn btn-sp" style="background:transparent;border:1.5px solid rgba(245,158,11,.4);color:var(--sp)">
+        Ver programas completos en superprofe.asesoreducativo.mx
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
     </div>
   </div>
 </section>
@@ -2259,7 +2086,7 @@ ul { list-style: none; }
           <div class="links">
             <a href="#servicios" data-en="Services">Servicios</a>
             <a href="#cursos" data-en="Courses">Cursos</a>
-            <a href="#superprofe" data-en="SúperProfe">SúperProfe</a>
+            <a href="https://superprofe.asesoreducativo.mx" target="_blank" rel="noopener" data-en="SúperProfe">SúperProfe</a>
             <a href="#sobre" data-en="About">Sobre mí</a>
             <a href="#precios" data-en="Pricing">Precios</a>
             <a href="#contacto" data-en="Contact">Contacto</a>
