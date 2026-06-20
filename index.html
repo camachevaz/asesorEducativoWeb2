@@ -1395,7 +1395,6 @@ ul { list-style: none; }
   -->
   <div class="hero-bg">
     <img src="assets/images/hero-bg.png" alt="">
-    <div class="ph-fallback"></div>
   </div>
   <div class="wrap hero-inner">
     <div>
@@ -1532,8 +1531,9 @@ ul { list-style: none; }
         Prop: 16:9 · 800×450px mínimo.
         Ruta: assets/images/servicio-online.png
         -->
+        <div class="svc-img">
           <img src="assets/images/servicio-online.png" alt="Sesión de capacitación en línea">
-        
+        </div>
         <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
         <h3 class="h3" data-en="Online &amp; live">En línea y en vivo</h3>
         <p data-en="Live video classes from anywhere. Follow exercises in real time, ask questions, practice.">Clases por videollamada desde donde estés. Ejercicios en tiempo real, preguntas, práctica.</p>
@@ -1548,9 +1548,9 @@ ul { list-style: none; }
         Prop: 16:9 · 800×450px mínimo.
         Ruta: assets/images/servicio-empresa.png
         -->
-
+        <div class="svc-img">
           <img src="assets/images/servicio-empresa.png" alt="Capacitación presencial en empresa">
-        
+        </div>
         <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
         <h3 class="h3" data-en="In-company">En tu empresa</h3>
         <p data-en="Team training built around your actual files and workflows. Available in Mexicali and region.">Capacitación para equipos, sobre tus propios archivos y procesos. Disponible en Mexicali y región.</p>
@@ -1565,9 +1565,9 @@ ul { list-style: none; }
         Prop: 16:9 · 800×450px mínimo.
         Ruta: assets/images/servicio-individual.png
         -->
-
+        <div class="svc-img">
           <img src="assets/images/servicio-individual.png" alt="Sesión de capacitación individual">
-        
+        </div>
         <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div>
         <h3 class="h3" data-en="One-on-one">Individual</h3>
         <p data-en="Personalized sessions at your own pace, focused on exactly what you need to solve.">Sesiones personalizadas a tu ritmo, enfocadas en exactamente lo que necesitas resolver.</p>
@@ -1594,11 +1594,11 @@ ul { list-style: none; }
     Prop: landscape 1400×400px aprox. (muy horizontal, tipo banner).
     Ruta: assets/images/cursos-banner.png
     -->
-    
+    <div class="cursos-ctx-img">
       <img src="assets/images/cursos-banner.png" alt="">
-           <div class="ctx-overlay"></div>
-           <span class="ctx-label">=APRENDER_HACIENDO()</span>
-   
+      <div class="ctx-overlay"></div>
+      <span class="ctx-label">=APRENDER_HACIENDO()</span>
+    </div>
 
     <div class="cursos-tabs" role="tablist" aria-label="Herramienta">
       <button class="tab-btn active" data-tab="excel" role="tab" aria-selected="true" data-en="Excel">Excel</button>
@@ -2091,10 +2091,7 @@ ul { list-style: none; }
         Ruta: assets/images/carlos-avatar.png
         -->
         <div class="id-avatar-wrap">
-          <div class="id-avatar-initials">CC</div>
-          
           <img src="assets/images/carlos-avatar.png" alt="Mtro. Carlos Chee Vázquez">
-          
         </div>
         <div class="id-name">Mtro. Carlos Manuel<br>Chee Vázquez</div>
         <div class="id-role" data-en="educational advisor">asesor educativo</div>
