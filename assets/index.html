@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,
+        maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Comunicador Emmy">
+  <meta name="theme-color" content="#7a4a1e">
+  <title>Comunicador Emmy</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="assets/img/icon-192.png">
+  <link rel="icon" type="image/png" href="assets/img/icon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Outfit:wght@700;800;900&display=swap">
+
+  <style>
+    /* ── Variables del tema — Océano Pixar ───────────────────── */
+    :root {
+      /* ── Playa — arena cálida bajo el sol ───────────────────── */
+      --m-bg:        #7a4a1e;   /* arena oscura, fondo base */
+      --m-bg-mid:    #a0622a;   /* arena mediodía cálida */
+      --m-surface:   rgba(255, 255, 255, 0.14);
+      --m-ink:       #fff8ee;   /* blanco cálido */
+      --m-ink-soft:  rgba(255, 248, 238, 0.68);
+      --m-ink-dark:  #2a1200;   /* marrón muy oscuro */
+      --m-primary:   #00b4d8;   /* turquesa del mar */
+      --m-primary-dk:#0096b4;
+      --m-accent:    #ffd60a;   /* amarillo sol */
+      --m-teal:      #f4845f;   /* naranja arena húmeda */
+      --m-coral:     #e63946;   /* rojo coral — errores */
+      --m-gold:      #ffaa00;   /* dorado arena seca */
+      --t-primary:   #00b4d8;   /* turquesa — acento principal */
+      --t-secondary: #f4845f;   /* naranja */
+      --t-accent:    #ffd60a;   /* amarillo sol */
+      --t-warn:      #e63946;   /* rojo coral */
+      --r-sm:        12px;
+      --r-md:        18px;
+      --r-lg:        26px;
+      --r-xl:        36px;
+      --s-card:      0 8px 24px rgba(80, 30, 0, 0.35);
+      --s-deep:      0 16px 48px rgba(60, 20, 0, 0.50);
+      --safe-top:    env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: 'Nunito', system-ui, sans-serif;
+      background: var(--m-bg);
+      color: var(--m-ink);
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      overscroll-behavior: none;
+      touch-action: manipulation;
+    }
+
+    /* ── App shell ────────────────────────────────────────────── */
+    #app {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      /* En PWA de iOS, inset:0 puede dejar el body asomando en el safe-area
+         inferior (la franja del home indicator). Forzar la altura al viewport
+         dinámico completo elimina esa franja. */
+      height: 100dvh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      background: transparent;
+    }
+
+    /* ── Header ───────────────────────────────────────────────── */
+    #app-header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;   /* ← izquierda, igual que Marina 2 */
+      padding: calc(var(--safe-top) + 10px) 16px 10px;
+      background: rgba(30, 12, 2, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 220, 150, 0.18);
+      min-height: 56px;
+      gap: 12px;
+    }
+
+    #btn-volver {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      font-size: 1.4rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      touch-action: manipulation;
+    }
+
+    #app-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.15rem, 4vw, 1.6rem);
+      color: #ffffff;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+      flex: 1;
+      text-align: left;
+      pointer-events: none;
+      letter-spacing: -0.01em;
+    }
+
+    #perfil-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 99px;
+      padding: 6px 14px 6px 8px;
+      font-size: .92rem;
+      font-weight: 900;
+      cursor: pointer;
+      flex-shrink: 0;
+      border: none;
+      color: #ffffff;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+
+    #btn-ajustes-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.12);
+      color: white;
+      font-size: 1.3rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      touch-action: manipulation;
+      transition: background 0.15s, transform 0.12s;
+    }
+    #btn-ajustes-header:active {
+      background: rgba(255,255,255,0.22);
+      transform: scale(0.92);
+    }
+
+    #pill-idioma {
+      display: none;
+      background: rgba(255,255,255,0.12);
+      border-radius: 99px;
+      padding: 4px;
+      gap: 2px;
+    }
+    #pill-idioma button {
+      border: none; background: transparent; color: rgba(255,255,255,0.55);
+      font-weight: 800; font-size: .8rem; padding: 4px 10px;
+      border-radius: 99px; cursor: pointer;
+    }
+    #pill-idioma button.activo { background: var(--t-primary); color: #032340; }
+
+    #modulo-acciones {
+      display: flex; gap: 8px; align-items: center; flex-shrink: 0;
+    }
+
+    /* ── Body ─────────────────────────────────────────────────── */
+    #app-body {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── Menú home ────────────────────────────────────────────── */
+    #vista-menu {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    #menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 16px;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    /* iPhone 13 portrait (390px) y menores — columna única, altura distribuida */
+    /* iPhone 13 portrait (390px) y menores — columna única, 75% ancho */
+    @media (max-width: 430px) and (orientation: portrait) {
+      #vista-menu {
+        align-items: center;
+        justify-content: center;
+        padding: 24px 20px;
+        overflow-y: auto;
+      }
+      #menu-grid {
+        display: flex;
+        flex-direction: column;
+        width: 75%;
+        max-width: 75%;
+        gap: 20px;
+        align-items: stretch;
+      }
+      .module-tile {
+        aspect-ratio: 1;
+        flex-shrink: 0;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 0 4px 8px;
+        background-position: center top;
+        background-size: contain;
+      }
+      .tile-label {
+        font-size: 1.25rem;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.85), 0 0 16px rgba(0,0,0,0.5);
+        margin-top: 6px;
+        margin-left: 0;
+        text-align: center;
+        flex: unset;
+      }
+    }
+
+    .module-tile {
+      aspect-ratio: 1;
+      border-radius: 0;
+      border: none;
+      background: transparent;
+      background-size: contain;
+      background-position: center top;
+      background-repeat: no-repeat;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 4px 4px;
+      position: relative;
+      overflow: visible;
+      box-shadow: none;
+      transition: transform 0.12s ease, opacity 0.12s ease;
+    }
+    .module-tile:active { transform: scale(0.94); opacity: 0.75; }
+
+    .tile-label {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.05rem, 3vw, 1.25rem);
+      color: #ffffff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.85), 0 0 16px rgba(0,0,0,0.5);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      margin-top: 6px;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── Indicador de conexión ────────────────────────────────── */
+    #indicador-offline {
+      position: fixed;
+      bottom: calc(var(--safe-bottom) + 12px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(8px);
+      border-radius: 99px;
+      padding: 6px 16px;
+      font-size: .8rem;
+      font-weight: 800;
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    #indicador-offline.offline { opacity: 1; }
+
+    /* ── Toast ────────────────────────────────────────────────── */
+    #toast-container {
+      position: fixed;
+      bottom: calc(var(--safe-bottom) + 80px);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    /* ── Modal PIN ────────────────────────────────────────────── */
+    #modal-pin {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(8px);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+    }
+    #modal-pin[aria-hidden="false"] { display: flex; }
+
+    .pin-box {
+      background: rgba(60, 25, 5, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--r-xl);
+      padding: 32px 28px;
+      width: min(340px, 90vw);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: var(--s-deep);
+    }
+    .pin-box h3 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      color: #fff8ee;
+      text-align: center;
+      letter-spacing: -0.01em;
+    }
+    #pin-hint {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff8ee;
+      text-align: center;
+      min-height: 1.2em;
+    }
+    #input-pin {
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.20);
+      border-radius: var(--r-md);
+      color: white;
+      font-family: inherit;
+      font-weight: 900;
+      font-size: 1.5rem;
+      letter-spacing: 0.3em;
+      padding: 14px;
+      text-align: center;
+      width: 100%;
+      outline: none;
+      -moz-appearance: textfield;
+    }
+    #input-pin::-webkit-inner-spin-button,
+    #input-pin::-webkit-outer-spin-button { -webkit-appearance: none; }
+    #input-pin:focus {
+      border-color: var(--t-primary);
+      box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.30);
+    }
+    .pin-btns { display: flex; gap: 10px; }
+    .pin-btns button {
+      flex: 1;
+      padding: 16px;
+      border-radius: var(--r-md);
+      border: none;
+      font-weight: 900;
+      font-size: 1.2rem;
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: 0.01em;
+    }
+    #btn-pin-ok     { background: var(--t-primary); color: #2a1200; }
+    #btn-pin-cancel {
+      background: rgba(255,255,255,0.12);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.20);
+    }
+    #pin-error {
+      color: #ff8a80;
+      font-size: 1.05rem;
+      font-weight: 900;
+      margin-top: 8px;
+      min-height: 1em;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- El fondo animado del tema se inyecta aquí por app.js -->
+
+    <header id="app-header" role="banner">
+      <!-- Montado dinámicamente por app.js -->
+    </header>
+
+    <div id="app-body" role="main">
+      <div id="vista-menu">
+        <div id="menu-grid" role="list" aria-label="Módulos disponibles">
+          <!-- Tiles montados por app.js -->
+        </div>
+      </div>
+      <!-- Los contenedores de módulos se insertan aquí dinámicamente -->
+    </div>
+  </div>
+
+  <!-- Indicador de conexión -->
+  <div id="indicador-offline" role="status" aria-live="polite">
+    <span id="texto-conexion"></span>
+  </div>
+
+  <!-- Toasts -->
+  <div id="toast-container" role="alert" aria-live="assertive" aria-atomic="true"></div>
+
+  <!-- Modal PIN -->
+  <div id="modal-pin" role="dialog" aria-modal="true"
+       aria-labelledby="pin-titulo" aria-hidden="true">
+    <div class="pin-box">
+      <h3 id="pin-titulo">Área de adultos</h3>
+      <div id="pin-hint"></div>
+      <input id="input-pin" type="number" inputmode="numeric"
+             autocomplete="off" min="1" max="9999"
+             aria-label="Ingresa el PIN" />
+      <div class="pin-btns">
+        <button id="btn-pin-cancel">Cancelar</button>
+        <button id="btn-pin-ok">Abrir</button>
+      </div>
+      <div id="pin-error" role="alert"></div>
+    </div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+
+</html>
